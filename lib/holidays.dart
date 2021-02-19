@@ -48,131 +48,144 @@ class ClinicHolidays extends StatefulWidget {
 }
 
 class _ClinicHolidaysState extends State<ClinicHolidays> {
-  bool _isSelected = false;
+  Map<String, bool> holidays = {
+    'sun': false,
+    'mon': false,
+    'tue': false,
+    'wed': false,
+    'thru': false,
+    'fri': false,
+    'sat': false,
+  };
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.black,
-        body: Container(
-            color: Colors.black,
-            padding: EdgeInsets.all(40.0),
-            child: SingleChildScrollView(
-                child: Column(children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
+        body: Form(
+          key: _formKey,
+          child: Container(
+              color: Colors.black,
+              padding: EdgeInsets.all(40.0),
+              child: SingleChildScrollView(
+                  child: Column(children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
                     ),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                  Text(
-                    "Holidays",
-                    style: TextStyle(
-                        color: Color(0xffF5A623),
-                        fontSize: 44,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 40.0,
-              ),
-              LabeledCheckbox(
-                label: 'Sunday',
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                value: _isSelected,
-                onChanged: (bool newValue) {
-                  setState(() {
-                    _isSelected = newValue;
-                  });
-                },
-              ),
-              LabeledCheckbox(
-                label: 'Monday',
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                value: _isSelected,
-                onChanged: (bool newValue) {
-                  setState(() {
-                    _isSelected = newValue;
-                  });
-                },
-              ),
-              LabeledCheckbox(
-                label: 'Tuesday',
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                value: _isSelected,
-                onChanged: (bool newValue) {
-                  setState(() {
-                    _isSelected = newValue;
-                  });
-                },
-              ),
-              LabeledCheckbox(
-                label: 'Wednesday',
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                value: _isSelected,
-                onChanged: (bool newValue) {
-                  setState(() {
-                    _isSelected = newValue;
-                  });
-                },
-              ),
-              LabeledCheckbox(
-                label: 'Thrusday',
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                value: _isSelected,
-                onChanged: (bool newValue) {
-                  setState(() {
-                    _isSelected = newValue;
-                  });
-                },
-              ),
-              LabeledCheckbox(
-                label: 'Friday',
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                value: _isSelected,
-                onChanged: (bool newValue) {
-                  setState(() {
-                    _isSelected = newValue;
-                  });
-                },
-              ),
-              LabeledCheckbox(
-                label: 'Saturday',
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                value: _isSelected,
-                onChanged: (bool newValue) {
-                  setState(() {
-                    _isSelected = newValue;
-                  });
-                },
-              ),
-              SizedBox(
-                height: 224.0,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    color: Color(0xffF5A623),
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                alignment: Alignment.center,
-                child: FlatButton(
-                    onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ClinicHolidays()),
-                        ),
-                    child: Text(
-                      "Continue",
+                    Text(
+                      "Holidays",
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 19.0,
+                          color: Color(0xffF5A623),
+                          fontSize: 44,
                           fontWeight: FontWeight.w500),
-                    )),
-              )
-            ]))));
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 40.0,
+                ),
+                LabeledCheckbox(
+                  label: 'Sunday',
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  value: holidays['sun'],
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      holidays['sun'] = newValue;
+                    });
+                  },
+                ),
+                LabeledCheckbox(
+                  label: 'Monday',
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  value: holidays['mon'],
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      holidays['mon'] = newValue;
+                    });
+                  },
+                ),
+                LabeledCheckbox(
+                  label: 'Tuesday',
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  value: holidays['tue'],
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      holidays['tue'] = newValue;
+                    });
+                  },
+                ),
+                LabeledCheckbox(
+                  label: 'Wednesday',
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  value: holidays['wed'],
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      holidays['wed'] = newValue;
+                    });
+                  },
+                ),
+                LabeledCheckbox(
+                  label: 'Thrusday',
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  value: holidays['thru'],
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      holidays['thru'] = newValue;
+                    });
+                  },
+                ),
+                LabeledCheckbox(
+                  label: 'Friday',
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  value: holidays['fri'],
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      holidays['fri'] = newValue;
+                    });
+                  },
+                ),
+                LabeledCheckbox(
+                  label: 'Saturday',
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  value: holidays['sat'],
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      holidays['sat'] = newValue;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 224.0,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xffF5A623),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  alignment: Alignment.center,
+                  child: FlatButton(
+                      onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ClinicHolidays()),
+                          ),
+                      child: Text(
+                        "Continue",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 19.0,
+                            fontWeight: FontWeight.w500),
+                      )),
+                )
+              ]))),
+        ));
   }
 }
