@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:upcloud_clinic/holidays.dart';
 
 class ClinicAddress extends StatefulWidget {
   @override
@@ -111,11 +112,7 @@ class _ClinicAddressState extends State<ClinicAddress> {
                         borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     alignment: Alignment.center,
                     child: FlatButton(
-                        onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ClinicAddress()),
-                            ),
+                        onPressed: null,
                         child: Text(
                           "Continue",
                           style: TextStyle(
