@@ -4,119 +4,194 @@ import 'package:upcloud_clinic/holidays.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  runApp(MaterialApp(
       theme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: Colors.white,
         accentColor: Color(0xffF5A623),
       ),
       debugShowCheckedModeBanner: false,
-      home: ClinicForm(),
-    );
-  }
+      home: MyApp()));
 }
 
-class ClinicForm extends StatefulWidget {
+class MyApp extends StatefulWidget {
   @override
-  _ClinicFormState createState() => _ClinicFormState();
+  _MyAppState createState() => _MyAppState();
 }
 
-class _ClinicFormState extends State<ClinicForm> {
+class _MyAppState extends State<MyApp> {
+  List<Widget> numForms = List();
+  _MyAppState() {
+    print("Started");
+  }
+
+  void addForm(int choice) {
+    setState(() {
+      if (choice == 1) {
+        numForms.add(MyForm(addForm));
+      } else {
+        numForms.removeLast();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.black,
         body: Container(
-            color: Colors.black,
+          color: Colors.black,
+          padding: EdgeInsets.all(20),
+          child: SingleChildScrollView(
             padding: EdgeInsets.all(20),
-            child: SingleChildScrollView(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Create",
-                      style: TextStyle(
-                          color: Color(0xffF5A623),
-                          fontSize: 44,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      "Profile",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 44,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(
-                      height: 47.0,
-                    ),
-                    Text(
-                      "Clinic",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      "Details",
-                      style: TextStyle(
-                          color: Color(0xffF5A623),
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    //////
-                    ///
-                    ///
-                    RadioAddClinic(),
-                    MyForm(),
-                    // startForm == 1 ? MyForm() : Container(),
-                    // for (var item in numForms) item,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Create",
+                  style: TextStyle(
+                      color: Color(0xffF5A623),
+                      fontSize: 44,
+                      fontWeight: FontWeight.w500),
+                ),
+                Text(
+                  "Profile",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 44,
+                      fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  height: 47.0,
+                ),
+                Text(
+                  "Clinic",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500),
+                ),
+                Text(
+                  "Details",
+                  style: TextStyle(
+                      color: Color(0xffF5A623),
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500),
+                ),
+                StartForm(addForm),
+                for (var item in numForms) item,
+                Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xffF5A623),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  alignment: Alignment.center,
+                  child: FlatButton(
+                      onPressed: null,
+                      child: Text(
+                        "Continue",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 19.0,
+                            fontWeight: FontWeight.w500),
+                      )),
+                )
+              ],
+            ),
+          ),
+        ));
+  }
+}
 
-                    ////
-                    ///
-                    ///
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Color(0xffF5A623),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                      alignment: Alignment.center,
-                      child: FlatButton(
-                          onPressed: null,
-                          child: Text(
-                            "Continue",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 19.0,
-                                fontWeight: FontWeight.w500),
-                          )),
-                    )
-                  ]),
-            )));
+class StartForm extends StatefulWidget {
+  var numForm;
+  StartForm(numForm) {
+    this.numForm = numForm;
+  }
+  @override
+  _StartFormState createState() => _StartFormState(numForm);
+}
+
+int startedForm = 0;
+
+class _StartFormState extends State<StartForm> {
+  List<String> clinicType = List();
+  var numForm;
+
+  String _character = 'none';
+  _StartFormState(numForm) {
+    print("In startForm");
+    this.clinicType = ['owned', 'visiting', 'none'];
+    this.numForm = numForm;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Expanded(
+          child: ListTile(
+            title: const Text('Owned Clinic', style: TextStyle(fontSize: 10.0)),
+            leading: Radio(
+              value: clinicType[0],
+              groupValue: _character,
+              activeColor: Color(0xffF5A623),
+              onChanged: (String value) {
+                setState(() {
+                  _character = value;
+                  if (startedForm == 0) {
+                    startedForm = 1;
+                    numForm(1);
+
+                    print("startedForm val$startedForm");
+                  }
+                });
+              },
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListTile(
+            title:
+                const Text('Visiting Clinic', style: TextStyle(fontSize: 10.0)),
+            leading: Radio(
+              value: clinicType[1],
+              groupValue: _character,
+              activeColor: Color(0xffF5A623),
+              onChanged: (String value) {
+                setState(() {
+                  _character = value;
+                  if (startedForm == 0) {
+                    startedForm = 1;
+                    numForm(1);
+
+                    print("startedForm val$startedForm");
+                  }
+                });
+              },
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
 class MyForm extends StatefulWidget {
+  var numForm;
+  MyForm(numF) {
+    this.numForm = numF;
+  }
   @override
-  _MyFormState createState() => _MyFormState();
+  _MyFormState createState() => _MyFormState(numForm);
 }
 
-enum ClinicType { owned, visiting, none }
-enum AddClinic { yes, no }
-int startForm = 0;
-List<Widget> numForms = new List();
-
 class _MyFormState extends State<MyForm> {
-  TextEditingController name = TextEditingController();
-  TextEditingController number1 = TextEditingController();
-  TextEditingController number2 = TextEditingController();
+  var _formKey;
+  var numForm;
+  List<String> addForm;
+  String _nclinic;
+  int f;
   var stateCode = {
     'Mobile': '+91',
     'Delhi': '011',
@@ -124,17 +199,26 @@ class _MyFormState extends State<MyForm> {
     'Chennai': '044',
     'Hyderabad': '040'
   };
-  AddClinic _nclinic = AddClinic.no;
-  String dropdownstate = 'Mobile';
-  final _formKey = GlobalKey<FormState>();
+  String dropdownstate;
+  _MyFormState(numForm) {
+    this.addForm = ['yes', 'no'];
+    this._nclinic = 'no';
+    this._formKey = GlobalKey<FormState>();
+    this.numForm = numForm;
+    this.f = startedForm;
+    this.dropdownstate = 'Mobile';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
-        key: _formKey,
-        child: Column(children: <Widget>[
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          f == 1 ? SizedBox() : StartForm(numForm),
           TextFormField(
-            controller: name,
             decoration: const InputDecoration(
+              border: InputBorder.none,
               labelText: 'Clinic Name 1',
               icon: Icon(
                 Icons.person,
@@ -152,28 +236,50 @@ class _MyFormState extends State<MyForm> {
               }
             },
           ),
-          TextFormField(
-            decoration: InputDecoration(
-                labelText: 'Clinic Address ',
-                icon: IconButton(
-                  icon: Icon(
-                    Icons.home,
-                    color: Color(0xffF5A623),
+          Divider(
+            color: Colors.grey[600],
+            height: 2,
+            thickness: 1,
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    labelText: 'Clinic Address ',
+                    icon: Icon(
+                      Icons.home,
+                      color: Color(0xffF5A623),
+                    ),
                   ),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ClinicAddress()),
-                  ),
-                )),
+                ),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Color(0xffF5A623),
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ClinicAddress()),
+                ),
+              )
+            ],
+          ),
+          Divider(
+            color: Colors.grey[600],
+            height: 2,
+            thickness: 1,
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Expanded(
                 child: TextFormField(
-                  controller: number1,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
+                    border: InputBorder.none,
                     prefix: Text(stateCode[dropdownstate]),
                     labelText: 'Clinic No. 1 ',
                     icon: Icon(
@@ -226,10 +332,15 @@ class _MyFormState extends State<MyForm> {
               ),
             ],
           ),
+          Divider(
+            color: Colors.grey[600],
+            height: 2,
+            thickness: 1,
+          ),
           TextFormField(
-            controller: number2,
             keyboardType: TextInputType.phone,
             decoration: const InputDecoration(
+              border: InputBorder.none,
               labelText: 'Clinic Services ',
               icon: Icon(
                 Icons.phone,
@@ -244,9 +355,15 @@ class _MyFormState extends State<MyForm> {
                 return null;
             },
           ),
+          Divider(
+            color: Colors.grey[600],
+            height: 2,
+            thickness: 1,
+          ),
           TextFormField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
+                border: InputBorder.none,
                 labelText: 'Clinic Issues ',
                 icon: SvgPicture.asset(
                   "assets/noun_Rupee_1060217.svg",
@@ -254,9 +371,15 @@ class _MyFormState extends State<MyForm> {
                   width: 30.0,
                 )),
           ),
+          Divider(
+            color: Colors.grey[600],
+            height: 2,
+            thickness: 1,
+          ),
           TextFormField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
+              border: InputBorder.none,
               labelText: 'Consultation Fees ',
               icon: Icon(
                 Icons.access_time,
@@ -264,23 +387,46 @@ class _MyFormState extends State<MyForm> {
               ),
             ),
           ),
-          TextFormField(
-            decoration: InputDecoration(
-                labelText: "Holiday's",
-                icon: IconButton(
-                  icon: Icon(
-                    Icons.calendar_today,
-                    color: Color(0xffF5A623),
+          Divider(
+            color: Colors.grey[600],
+            height: 2,
+            thickness: 1,
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    labelText: "Holiday's",
+                    icon: Icon(
+                      Icons.calendar_today,
+                      color: Color(0xffF5A623),
+                    ),
                   ),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ClinicHolidays()),
-                  ),
-                )),
+                ),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Color(0xffF5A623),
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ClinicHolidays()),
+                ),
+              )
+            ],
+          ),
+          Divider(
+            color: Colors.grey[600],
+            height: 2,
+            thickness: 1,
           ),
           TextFormField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
+              border: InputBorder.none,
               labelText: "Avg Pt. per/day",
               icon: Icon(
                 Icons.access_time,
@@ -288,25 +434,29 @@ class _MyFormState extends State<MyForm> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 15.0),
-            child: Text(
-              "Do you have another Clinic?",
-              style: TextStyle(fontSize: 16.0),
-            ),
+          Divider(
+            color: Colors.grey[600],
+            height: 2,
+            thickness: 1,
           ),
           Column(
             children: <Widget>[
               ListTile(
-                title: const Text('Yes', style: TextStyle(fontSize: 10.0)),
+                title:
+                    const Text('Add Clinic?', style: TextStyle(fontSize: 10.0)),
                 leading: Radio(
-                  value: AddClinic.yes,
+                  value: addForm[0],
                   groupValue: _nclinic,
                   activeColor: Color(0xffF5A623),
-                  onChanged: (AddClinic value) {
+                  onChanged: (String value) {
                     setState(() {
-                      numForms.add(MyForm());
                       _nclinic = value;
+                      if (startedForm == 1) {
+                        startedForm = 2;
+                      }
+                      print(">>startedForm val$startedForm");
+                      numForm(1);
+                      print(">>>startedForm val$startedForm");
                     });
                   },
                 ),
@@ -314,70 +464,31 @@ class _MyFormState extends State<MyForm> {
               ListTile(
                 title: const Text('No', style: TextStyle(fontSize: 10.0)),
                 leading: Radio(
-                  value: AddClinic.no,
+                  value: addForm[1],
                   groupValue: _nclinic,
                   activeColor: Color(0xffF5A623),
-                  onChanged: (AddClinic value) {
+                  onChanged: (String value) {
                     setState(() {
                       _nclinic = value;
+                      if (startedForm == 1) {
+                        startedForm = 2;
+                      }
+                      print(">>startedForm val$startedForm");
+                      numForm(-1);
+                      print(">>>startedForm val$startedForm");
                     });
-                    if (_formKey.currentState.validate()) {}
                   },
                 ),
               ),
+              Divider(
+                color: Colors.grey[600],
+                height: 2,
+                thickness: 1,
+              ),
             ],
           ),
-        ]));
-  }
-}
-
-class RadioAddClinic extends StatefulWidget {
-  @override
-  _RadioAddClinicState createState() => _RadioAddClinicState();
-}
-
-class _RadioAddClinicState extends State<RadioAddClinic> {
-  ClinicType _character = ClinicType.none;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Expanded(
-          child: ListTile(
-            title: const Text('Owned Clinic', style: TextStyle(fontSize: 10.0)),
-            leading: Radio(
-              value: ClinicType.owned,
-              groupValue: _character,
-              activeColor: Color(0xffF5A623),
-              onChanged: (ClinicType value) {
-                setState(() {
-                  _character = value;
-                  startForm = startForm + 1;
-                });
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: ListTile(
-            title:
-                const Text('Visiting Clinic', style: TextStyle(fontSize: 10.0)),
-            leading: Radio(
-              value: ClinicType.visiting,
-              groupValue: _character,
-              activeColor: Color(0xffF5A623),
-              onChanged: (ClinicType value) {
-                setState(() {
-                  _character = value;
-                  startForm = startForm + 1;
-                });
-              },
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
